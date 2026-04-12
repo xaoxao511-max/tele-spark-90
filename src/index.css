@@ -6,46 +6,45 @@
 
 @layer base {
   :root {
-    --background: 240 6% 4%;
-    --foreground: 240 5% 90%;
-    --card: 240 5% 7%;
-    --card-foreground: 240 5% 90%;
-    --popover: 240 5% 7%;
-    --popover-foreground: 240 5% 90%;
-    --primary: 82 85% 55%;
-    --primary-foreground: 240 6% 4%;
-    --secondary: 240 4% 12%;
-    --secondary-foreground: 240 5% 75%;
-    --muted: 240 4% 12%;
-    --muted-foreground: 240 5% 45%;
-    --accent: 82 85% 55%;
-    --accent-foreground: 240 6% 4%;
-    --destructive: 0 62% 45%;
+    --background: 240 5% 96%;
+    --foreground: 240 6% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 6% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 6% 10%;
+    --primary: 82 85% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 92%;
+    --secondary-foreground: 240 6% 20%;
+    --muted: 240 5% 90%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 82 85% 40%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
-    --ring: 82 85% 55%;
+    --border: 240 5% 87%;
+    --input: 240 5% 87%;
+    --ring: 82 85% 40%;
     --radius: 0.75rem;
 
-    /* Telegram custom tokens */
-    --tg-bg-chat: 240 6% 4%;
-    --tg-bg-sidebar: 240 5% 7%;
-    --tg-bg-message-out: 82 40% 14%;
-    --tg-bg-message-in: 240 4% 12%;
-    --tg-bubble-shadow: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
+    --tg-bg-chat: 240 5% 96%;
+    --tg-bg-sidebar: 0 0% 100%;
+    --tg-bg-message-out: 82 50% 90%;
+    --tg-bg-message-in: 0 0% 100%;
+    --tg-bubble-shadow: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
     --tg-online: 142 70% 45%;
-    --tg-typing: 82 85% 55%;
-    --tg-unread: 82 85% 55%;
-    --tg-hover: 240 4% 10%;
+    --tg-typing: 82 85% 40%;
+    --tg-unread: 82 85% 40%;
+    --tg-hover: 240 5% 94%;
 
-    --sidebar-background: 240 5% 7%;
-    --sidebar-foreground: 240 5% 90%;
-    --sidebar-primary: 82 85% 55%;
-    --sidebar-primary-foreground: 240 6% 4%;
-    --sidebar-accent: 240 4% 10%;
-    --sidebar-accent-foreground: 240 5% 90%;
-    --sidebar-border: 240 4% 16%;
-    --sidebar-ring: 82 85% 55%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 6% 10%;
+    --sidebar-primary: 82 85% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 94%;
+    --sidebar-accent-foreground: 240 6% 10%;
+    --sidebar-border: 240 5% 92%;
+    --sidebar-ring: 82 85% 40%;
   }
 
   .dark {
@@ -114,15 +113,21 @@
 /* Grid / Caro background pattern */
 .grid-bg {
   background-image:
+    linear-gradient(rgba(128,128,128,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(128,128,128,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.dark .grid-bg {
+  background-image:
     linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size: 40px 40px;
 }
 
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(240 4% 20%) transparent;
+    scrollbar-color: hsl(var(--muted)) transparent;
   }
   .scrollbar-thin::-webkit-scrollbar {
     width: 5px;
@@ -132,10 +137,10 @@
     background: transparent;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(240 4% 24%);
+    background-color: hsl(var(--muted-foreground) / 0.3);
     border-radius: 3px;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(240 4% 32%);
+    background-color: hsl(var(--muted-foreground) / 0.5);
   }
 }
