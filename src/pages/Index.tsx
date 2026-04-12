@@ -105,7 +105,7 @@ const ChatLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] w-full overflow-hidden">
+    <div className="flex flex-col h-[100dvh] w-full overflow-hidden grid-bg">
       <div className="flex flex-1 min-h-0">
         {isMobile ? (
           renderMobileContent()

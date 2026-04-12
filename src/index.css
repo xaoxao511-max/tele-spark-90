@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,87 +6,87 @@
 
 @layer base {
   :root {
-    --background: 210 15% 96%;
-    --foreground: 210 20% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 210 20% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 20% 10%;
-    --primary: 210 78% 46%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 15% 92%;
-    --secondary-foreground: 210 20% 20%;
-    --muted: 210 12% 90%;
-    --muted-foreground: 210 10% 50%;
-    --accent: 210 78% 46%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 72% 51%;
+    --background: 240 6% 4%;
+    --foreground: 240 5% 90%;
+    --card: 240 5% 7%;
+    --card-foreground: 240 5% 90%;
+    --popover: 240 5% 7%;
+    --popover-foreground: 240 5% 90%;
+    --primary: 82 85% 55%;
+    --primary-foreground: 240 6% 4%;
+    --secondary: 240 4% 12%;
+    --secondary-foreground: 240 5% 75%;
+    --muted: 240 4% 12%;
+    --muted-foreground: 240 5% 45%;
+    --accent: 82 85% 55%;
+    --accent-foreground: 240 6% 4%;
+    --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
-    --border: 210 15% 88%;
-    --input: 210 15% 88%;
-    --ring: 210 78% 46%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 82 85% 55%;
     --radius: 0.75rem;
 
     /* Telegram custom tokens */
-    --tg-bg-chat: 210 15% 96%;
-    --tg-bg-sidebar: 0 0% 100%;
-    --tg-bg-message-out: 210 78% 92%;
-    --tg-bg-message-in: 0 0% 100%;
-    --tg-bubble-shadow: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
+    --tg-bg-chat: 240 6% 4%;
+    --tg-bg-sidebar: 240 5% 7%;
+    --tg-bg-message-out: 82 40% 14%;
+    --tg-bg-message-in: 240 4% 12%;
+    --tg-bubble-shadow: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
     --tg-online: 142 70% 45%;
-    --tg-typing: 210 78% 46%;
-    --tg-unread: 210 78% 46%;
-    --tg-hover: 210 15% 94%;
+    --tg-typing: 82 85% 55%;
+    --tg-unread: 82 85% 55%;
+    --tg-hover: 240 4% 10%;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 210 20% 10%;
-    --sidebar-primary: 210 78% 46%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 15% 94%;
-    --sidebar-accent-foreground: 210 20% 10%;
-    --sidebar-border: 210 15% 92%;
-    --sidebar-ring: 210 78% 46%;
+    --sidebar-background: 240 5% 7%;
+    --sidebar-foreground: 240 5% 90%;
+    --sidebar-primary: 82 85% 55%;
+    --sidebar-primary-foreground: 240 6% 4%;
+    --sidebar-accent: 240 4% 10%;
+    --sidebar-accent-foreground: 240 5% 90%;
+    --sidebar-border: 240 4% 16%;
+    --sidebar-ring: 82 85% 55%;
   }
 
   .dark {
-    --background: 60 18% 12%;
-    --foreground: 50 15% 88%;
-    --card: 60 16% 15%;
-    --card-foreground: 50 15% 88%;
-    --popover: 60 16% 15%;
-    --popover-foreground: 50 15% 88%;
-    --primary: 80 50% 45%;
-    --primary-foreground: 60 20% 8%;
-    --secondary: 60 14% 19%;
-    --secondary-foreground: 50 15% 80%;
-    --muted: 60 14% 19%;
-    --muted-foreground: 50 10% 55%;
-    --accent: 80 50% 45%;
-    --accent-foreground: 60 20% 8%;
-    --destructive: 0 62% 35%;
+    --background: 240 6% 4%;
+    --foreground: 240 5% 90%;
+    --card: 240 5% 7%;
+    --card-foreground: 240 5% 90%;
+    --popover: 240 5% 7%;
+    --popover-foreground: 240 5% 90%;
+    --primary: 82 85% 55%;
+    --primary-foreground: 240 6% 4%;
+    --secondary: 240 4% 12%;
+    --secondary-foreground: 240 5% 75%;
+    --muted: 240 4% 12%;
+    --muted-foreground: 240 5% 45%;
+    --accent: 82 85% 55%;
+    --accent-foreground: 240 6% 4%;
+    --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
-    --border: 60 12% 22%;
-    --input: 60 12% 22%;
-    --ring: 80 50% 45%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 82 85% 55%;
 
-    --tg-bg-chat: 60 18% 12%;
-    --tg-bg-sidebar: 60 16% 15%;
-    --tg-bg-message-out: 75 30% 22%;
-    --tg-bg-message-in: 60 14% 19%;
-    --tg-bubble-shadow: 0 1px 2px 0 hsl(0 0% 0% / 0.25);
+    --tg-bg-chat: 240 6% 4%;
+    --tg-bg-sidebar: 240 5% 7%;
+    --tg-bg-message-out: 82 40% 14%;
+    --tg-bg-message-in: 240 4% 12%;
+    --tg-bubble-shadow: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
     --tg-online: 142 70% 45%;
-    --tg-typing: 80 50% 45%;
-    --tg-unread: 80 50% 45%;
-    --tg-hover: 60 14% 20%;
+    --tg-typing: 82 85% 55%;
+    --tg-unread: 82 85% 55%;
+    --tg-hover: 240 4% 10%;
 
-    --sidebar-background: 60 16% 15%;
-    --sidebar-foreground: 50 15% 88%;
-    --sidebar-primary: 80 50% 45%;
-    --sidebar-primary-foreground: 60 20% 8%;
-    --sidebar-accent: 60 14% 20%;
-    --sidebar-accent-foreground: 50 15% 88%;
-    --sidebar-border: 60 12% 22%;
-    --sidebar-ring: 80 50% 45%;
+    --sidebar-background: 240 5% 7%;
+    --sidebar-foreground: 240 5% 90%;
+    --sidebar-primary: 82 85% 55%;
+    --sidebar-primary-foreground: 240 6% 4%;
+    --sidebar-accent: 240 4% 10%;
+    --sidebar-accent-foreground: 240 5% 90%;
+    --sidebar-border: 240 4% 16%;
+    --sidebar-ring: 82 85% 55%;
   }
 }
 
@@ -96,7 +96,8 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
-    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
     -webkit-text-size-adjust: 100%;
   }
@@ -105,23 +106,36 @@
     overflow: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-weight: 600;
   }
+}
+
+/* Grid / Caro background pattern */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted)) transparent;
+    scrollbar-color: hsl(240 4% 20%) transparent;
   }
   .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
+    height: 5px;
   }
   .scrollbar-thin::-webkit-scrollbar-track {
     background: transparent;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted-foreground) / 0.3);
-    border-radius: 20px;
+    background-color: hsl(240 4% 24%);
+    border-radius: 3px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(240 4% 32%);
   }
 }
