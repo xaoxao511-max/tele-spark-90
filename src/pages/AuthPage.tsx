@@ -36,7 +36,7 @@ const AuthPage: React.FC = () => {
       const { error } = await signIn(email, password);
       if (error) {
         if (error.message?.toLowerCase().includes('email not confirmed')) {
-          toast.error('Tài khoản chưa được kích hoạt. Vui lòng chờ Admin duyệt tài khoản của bạn.');
+          toast.error('Email chưa được xác nhận.');
         } else {
           toast.error(error.message);
         }
