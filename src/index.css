@@ -110,18 +110,20 @@
   }
 }
 
-/* Grid / Caro background pattern */
-.grid-bg {
+/* Grid / Caro background pattern — applied globally */
+body {
   background-image:
-    linear-gradient(rgba(128,128,128,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(128,128,128,0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
-.dark .grid-bg {
+.dark body,
+body.dark {
   background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
 @layer utilities {
