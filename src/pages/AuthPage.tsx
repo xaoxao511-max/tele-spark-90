@@ -50,7 +50,8 @@ const AuthPage: React.FC = () => {
       if (error) {
         toast.error(error.message);
       } else {
-        toast.success('Đăng ký thành công! Tài khoản của bạn đang chờ Admin duyệt. Vui lòng đợi thông báo kích hoạt.');
+        toast.success('Đăng ký thành công! Bạn có thể đăng nhập ngay.');
+        setIsLogin(true);
       }
     }
     setSubmitting(false);
