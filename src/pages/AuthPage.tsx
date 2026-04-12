@@ -36,7 +36,7 @@ const AuthPage: React.FC = () => {
       const { error } = await signIn(email, password);
       if (error) {
         if (error.message?.toLowerCase().includes('email not confirmed')) {
-          toast.error('Tài khoản chưa được kích hoạt. Vui lòng chờ Admin duyệt tài khoản của bạn.');
+          toast.error('Email chưa được xác nhận.');
         } else {
           toast.error(error.message);
         }
@@ -50,7 +50,8 @@ const AuthPage: React.FC = () => {
       if (error) {
         toast.error(error.message);
       } else {
-        toast.success('Đăng ký thành công! Tài khoản của bạn đang chờ Admin duyệt. Vui lòng đợi thông báo kích hoạt.');
+        toast.success('Đăng ký thành công! Bạn có thể đăng nhập ngay.');
+        setIsLogin(true);
       }
     }
     setSubmitting(false);
