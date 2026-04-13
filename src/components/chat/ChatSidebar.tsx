@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Search, Menu, Moon, Sun, Plus, Shield, Mail, User, Bookmark, Bell, Bot, UserPlus, Check, Clock, MessageCircle, UserMinus, XCircle, Ban, Eye, X } from 'lucide-react';
+import { Search, Menu, Moon, Sun, Plus, Shield, Mail, User, Bookmark, Bell, Bot, UserPlus, Check, Clock, MessageCircle, UserMinus, XCircle, Ban, Eye, X, KeyRound } from 'lucide-react';
 import { useChatContext } from '@/context/ChatContext';
 import { useAuth } from '@/context/AuthContext';
 import ChatAvatar from './ChatAvatar';
@@ -13,6 +13,7 @@ import AdminEmailApproval from './AdminEmailApproval';
 import EditProfileDialog from './EditProfileDialog';
 import ProfileViewDialog from './ProfileViewDialog';
 import NotificationPanel, { type NotificationItem } from './NotificationPanel';
+import ChangePasswordDialog from './ChangePasswordDialog';
 
 type ConversationMember = Tables<'conversation_members'>;
 type Profile = Tables<'profiles'>;
@@ -41,6 +42,7 @@ const ChatSidebar: React.FC = () => {
   const [showMenu, setShowMenu] = React.useState(false);
   const [showEmailApproval, setShowEmailApproval] = React.useState(false);
   const [showEditProfile, setShowEditProfile] = React.useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showBlockedList, setShowBlockedList] = useState(false);
   const [viewProfileUserId, setViewProfileUserId] = useState<string | null>(null);
@@ -285,6 +287,10 @@ const ChatSidebar: React.FC = () => {
                   <span>Người dùng đã chặn</span>
                   {blockedUsers.length > 0 && <span className="text-[10px] text-muted-foreground ml-auto">{blockedUsers.length}</span>}
                 </button>
+                <button onClick={() => { setShowMenu(false); setShowChangePassword(true); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
+                  <KeyRound className="h-4 w-4 text-primary" />
+                  <span>Đổi mật khẩu</span>
+                </button>
                 <button onClick={() => { toggleDarkMode(); setShowMenu(false); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                   {darkMode ? <Sun className="h-4 w-4 text-muted-foreground" /> : <Moon className="h-4 w-4 text-muted-foreground" />}
                   <span>{darkMode ? 'Chế độ sáng' : 'Chế độ tối'}</span>
@@ -458,6 +464,7 @@ const ChatSidebar: React.FC = () => {
       {showNewChat && <NewChatDialog onClose={() => setShowNewChat(false)} />}
       {showEmailApproval && <AdminEmailApproval onClose={() => setShowEmailApproval(false)} />}
       {showEditProfile && <EditProfileDialog onClose={() => setShowEditProfile(false)} />}
+      {showChangePassword && <ChangePasswordDialog onClose={() => setShowChangePassword(false)} />}
       {viewProfileUserId && <ProfileViewDialog userId={viewProfileUserId} onClose={() => setViewProfileUserId(null)} />}
       <AnimatePresence>
         {showNotifications && (
