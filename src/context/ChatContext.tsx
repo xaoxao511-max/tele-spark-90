@@ -530,14 +530,30 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, [user, realtimeConversationIds, realtimeConversationIdsKey, mergeConversationMessage]);
 
+  // Refetch active messages helper
+  const refetchActiveMessages = useCallback(async () => {
+    const convId = activeConversationIdRef.current;
+    if (!convId) return;
+    const { data } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('conversation_id', convId)
+      .order('created_at', { ascending: true })
+      .limit(100);
+    if (data && activeConversationIdRef.current === convId) {
+      setMessages(data);
+    }
+  }, []);
+
   // Reconnect realtime + refetch data when tab becomes visible again
   useEffect(() => {
     if (!user) return;
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
-        // Refetch conversations to catch any missed updates
+        // Refetch conversations and active messages to catch any missed updates
         fetchConversations(false);
         fetchFriendships();
+        refetchActiveMessages();
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);
@@ -546,6 +562,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const handleOnline = () => {
       fetchConversations(false);
       fetchFriendships();
+      refetchActiveMessages();
     };
     window.addEventListener('online', handleOnline);
 
@@ -553,7 +570,18 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       document.removeEventListener('visibilitychange', handleVisibility);
       window.removeEventListener('online', handleOnline);
     };
-  }, [user, fetchConversations, fetchFriendships]);
+  }, [user, fetchConversations, fetchFriendships, refetchActiveMessages]);
+
+  // Periodic heartbeat: refetch active messages every 60s to recover from stale realtime
+  useEffect(() => {
+    if (!user) return;
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible' && activeConversationIdRef.current) {
+        refetchActiveMessages();
+      }
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [user, refetchActiveMessages]);
 
 
   const userIdRef = useRef<string | null>(null);
@@ -686,14 +714,49 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const sendMessage = useCallback(async (text: string) => {
     if (!activeConversationId || !user || !text.trim()) return;
-    await supabase.from('messages').insert({
+
+    // Optimistic: add message to UI immediately
+    const optimisticId = crypto.randomUUID();
+    const optimisticMsg: Message = {
+      id: optimisticId,
       conversation_id: activeConversationId,
       sender_id: user.id,
       content: text.trim(),
       message_type: 'text',
-    });
+      status: 'sent',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      deleted: false,
+      deleted_for: [],
+      edited: false,
+      pinned: false,
+      reply_to: null,
+      file_url: null,
+      file_name: null,
+      file_size: null,
+    };
+    setMessages(prev => [...prev, optimisticMsg]);
+    mergeConversationMessage(optimisticMsg);
+
+    const { data, error } = await supabase.from('messages').insert({
+      conversation_id: activeConversationId,
+      sender_id: user.id,
+      content: text.trim(),
+      message_type: 'text',
+    }).select().single();
+
+    if (data) {
+      // Replace optimistic message with real one
+      setMessages(prev => prev.map(m => m.id === optimisticId ? data : m));
+      mergeConversationMessage(data);
+    } else if (error) {
+      // Remove optimistic message on failure
+      setMessages(prev => prev.filter(m => m.id !== optimisticId));
+      toast.error('Gửi tin nhắn thất bại');
+    }
+
     await supabase.from('conversations').update({ updated_at: new Date().toISOString() }).eq('id', activeConversationId);
-  }, [activeConversationId, user]);
+  }, [activeConversationId, user, mergeConversationMessage]);
 
   const deleteConversation = useCallback(async (convId: string) => {
     if (!user) return;
