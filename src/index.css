@@ -68,7 +68,7 @@
     --input: 240 4% 16%;
     --ring: 82 85% 55%;
 
-    --tg-bg-chat: 0 0% 0% / 0;
+    --tg-bg-chat: transparent;
     --tg-bg-sidebar: 240 5% 7%;
     --tg-bg-message-out: 82 40% 14%;
     --tg-bg-message-in: 240 4% 12%;
