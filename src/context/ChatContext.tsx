@@ -530,14 +530,30 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, [user, realtimeConversationIds, realtimeConversationIdsKey, mergeConversationMessage]);
 
+  // Refetch active messages helper
+  const refetchActiveMessages = useCallback(async () => {
+    const convId = activeConversationIdRef.current;
+    if (!convId) return;
+    const { data } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('conversation_id', convId)
+      .order('created_at', { ascending: true })
+      .limit(100);
+    if (data && activeConversationIdRef.current === convId) {
+      setMessages(data);
+    }
+  }, []);
+
   // Reconnect realtime + refetch data when tab becomes visible again
   useEffect(() => {
     if (!user) return;
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
-        // Refetch conversations to catch any missed updates
+        // Refetch conversations and active messages to catch any missed updates
         fetchConversations(false);
         fetchFriendships();
+        refetchActiveMessages();
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);
@@ -546,6 +562,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const handleOnline = () => {
       fetchConversations(false);
       fetchFriendships();
+      refetchActiveMessages();
     };
     window.addEventListener('online', handleOnline);
 
@@ -553,7 +570,18 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       document.removeEventListener('visibilitychange', handleVisibility);
       window.removeEventListener('online', handleOnline);
     };
-  }, [user, fetchConversations, fetchFriendships]);
+  }, [user, fetchConversations, fetchFriendships, refetchActiveMessages]);
+
+  // Periodic heartbeat: refetch active messages every 60s to recover from stale realtime
+  useEffect(() => {
+    if (!user) return;
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible' && activeConversationIdRef.current) {
+        refetchActiveMessages();
+      }
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [user, refetchActiveMessages]);
 
 
   const userIdRef = useRef<string | null>(null);
