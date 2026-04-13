@@ -42,6 +42,7 @@ const ChatSidebar: React.FC = () => {
   const [showMenu, setShowMenu] = React.useState(false);
   const [showEmailApproval, setShowEmailApproval] = React.useState(false);
   const [showEditProfile, setShowEditProfile] = React.useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showBlockedList, setShowBlockedList] = useState(false);
   const [viewProfileUserId, setViewProfileUserId] = useState<string | null>(null);
