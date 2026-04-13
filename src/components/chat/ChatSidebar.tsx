@@ -13,6 +13,7 @@ import AdminEmailApproval from './AdminEmailApproval';
 import EditProfileDialog from './EditProfileDialog';
 import ProfileViewDialog from './ProfileViewDialog';
 import NotificationPanel, { type NotificationItem } from './NotificationPanel';
+import ChangePasswordDialog from './ChangePasswordDialog';
 
 type ConversationMember = Tables<'conversation_members'>;
 type Profile = Tables<'profiles'>;
