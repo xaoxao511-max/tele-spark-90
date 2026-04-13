@@ -62,7 +62,7 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         tg: {
-          chat: "hsl(var(--tg-bg-chat))",
+          chat: "var(--tg-bg-chat)",
           sidebar: "hsl(var(--tg-bg-sidebar))",
           "message-out": "hsl(var(--tg-bg-message-out))",
           "message-in": "hsl(var(--tg-bg-message-in))",
