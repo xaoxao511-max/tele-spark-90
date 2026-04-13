@@ -287,6 +287,10 @@ const ChatSidebar: React.FC = () => {
                   <span>Người dùng đã chặn</span>
                   {blockedUsers.length > 0 && <span className="text-[10px] text-muted-foreground ml-auto">{blockedUsers.length}</span>}
                 </button>
+                <button onClick={() => { setShowMenu(false); setShowChangePassword(true); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
+                  <KeyRound className="h-4 w-4 text-primary" />
+                  <span>Đổi mật khẩu</span>
+                </button>
                 <button onClick={() => { toggleDarkMode(); setShowMenu(false); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                   {darkMode ? <Sun className="h-4 w-4 text-muted-foreground" /> : <Moon className="h-4 w-4 text-muted-foreground" />}
                   <span>{darkMode ? 'Chế độ sáng' : 'Chế độ tối'}</span>
