@@ -1,15 +1,18 @@
-import React from 'react';
-import { Moon, Sun, Bell, Shield, Bot, Mail, Ban, LogOut, Bookmark } from 'lucide-react';
+import React, { useState } from 'react';
+import { Moon, Sun, Bell, Shield, Bot, Mail, Ban, LogOut, Bookmark, KeyRound } from 'lucide-react';
 import { useChatContext } from '@/context/ChatContext';
 import { useAuth } from '@/context/AuthContext';
+import ChangePasswordDialog from './ChangePasswordDialog';
 
 const SettingsView: React.FC = () => {
   const { darkMode, toggleDarkMode, ensureSavedMessages, openBotFatherChat, blockedUsers } = useChatContext();
   const { signOut, isAdmin } = useAuth();
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   const items = [
     { icon: darkMode ? Sun : Moon, label: darkMode ? 'Chế độ sáng' : 'Chế độ tối', onClick: toggleDarkMode },
     { icon: Bookmark, label: 'Saved Messages', onClick: () => ensureSavedMessages() },
+    { icon: KeyRound, label: 'Đổi mật khẩu', onClick: () => setShowChangePassword(true) },
     { icon: Bot, label: '🤖 BotFather', onClick: () => openBotFatherChat() },
     { icon: Bot, label: 'Bot Management', onClick: () => { window.location.href = '/bots'; } },
     ...(isAdmin ? [
@@ -48,6 +51,7 @@ const SettingsView: React.FC = () => {
           </button>
         </div>
       </div>
+      {showChangePassword && <ChangePasswordDialog onClose={() => setShowChangePassword(false)} />}
     </div>
   );
 };
