@@ -714,14 +714,49 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const sendMessage = useCallback(async (text: string) => {
     if (!activeConversationId || !user || !text.trim()) return;
-    await supabase.from('messages').insert({
+
+    // Optimistic: add message to UI immediately
+    const optimisticId = crypto.randomUUID();
+    const optimisticMsg: Message = {
+      id: optimisticId,
       conversation_id: activeConversationId,
       sender_id: user.id,
       content: text.trim(),
       message_type: 'text',
-    });
+      status: 'sent',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      deleted: false,
+      deleted_for: [],
+      edited: false,
+      pinned: false,
+      reply_to: null,
+      file_url: null,
+      file_name: null,
+      file_size: null,
+    };
+    setMessages(prev => [...prev, optimisticMsg]);
+    mergeConversationMessage(optimisticMsg);
+
+    const { data, error } = await supabase.from('messages').insert({
+      conversation_id: activeConversationId,
+      sender_id: user.id,
+      content: text.trim(),
+      message_type: 'text',
+    }).select().single();
+
+    if (data) {
+      // Replace optimistic message with real one
+      setMessages(prev => prev.map(m => m.id === optimisticId ? data : m));
+      mergeConversationMessage(data);
+    } else if (error) {
+      // Remove optimistic message on failure
+      setMessages(prev => prev.filter(m => m.id !== optimisticId));
+      toast.error('Gửi tin nhắn thất bại');
+    }
+
     await supabase.from('conversations').update({ updated_at: new Date().toISOString() }).eq('id', activeConversationId);
-  }, [activeConversationId, user]);
+  }, [activeConversationId, user, mergeConversationMessage]);
 
   const deleteConversation = useCallback(async (convId: string) => {
     if (!user) return;
