@@ -51,6 +51,7 @@ const SettingsView: React.FC = () => {
           </button>
         </div>
       </div>
+      {showChangePassword && <ChangePasswordDialog onClose={() => setShowChangePassword(false)} />}
     </div>
   );
 };
