@@ -26,9 +26,19 @@ const ChangePasswordDialog: React.FC<Props> = ({ onClose }) => {
     }
     setSubmitting(true);
     try {
+      // Refresh session first to avoid "session not found"
+      const { error: refreshError } = await supabase.auth.refreshSession();
+      if (refreshError) {
+        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+        return;
+      }
       const { error } = await supabase.auth.updateUser({ password: newPassword });
       if (error) {
-        toast.error(error.message);
+        if (error.message.includes('same password')) {
+          toast.error('Mật khẩu mới phải khác mật khẩu cũ');
+        } else {
+          toast.error(error.message);
+        }
       } else {
         toast.success('Đổi mật khẩu thành công!');
         onClose();
