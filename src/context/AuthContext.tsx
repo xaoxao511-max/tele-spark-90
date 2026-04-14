@@ -61,9 +61,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           return newUser;
         });
         // Only handle subsequent auth changes (not the initial one)
+        // NOTE: Do NOT await here — it blocks supabase.auth.updateUser from resolving
         if (initialSessionHandled) {
           if (newSession?.user) {
-            await Promise.all([
+            Promise.all([
               fetchProfile(newSession.user.id),
               fetchRoles(newSession.user.id),
             ]);
