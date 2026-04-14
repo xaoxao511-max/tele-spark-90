@@ -25,14 +25,19 @@ const ChangePasswordDialog: React.FC<Props> = ({ onClose }) => {
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success('Đổi mật khẩu thành công!');
-      onClose();
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success('Đổi mật khẩu thành công!');
+        onClose();
+      }
+    } catch (err) {
+      toast.error('Đã xảy ra lỗi không xác định.');
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
 
   return (
