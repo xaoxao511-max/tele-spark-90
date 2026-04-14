@@ -126,6 +126,17 @@ serve(async (req) => {
       });
     }
 
+    if (action === "reset-password") {
+      const { userId, newPassword } = body;
+      const { error } = await supabase.auth.admin.updateUserById(userId, {
+        password: newPassword,
+      });
+      if (error) throw error;
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (action === "mass-update-to-user") {
       const { currentUserId } = body;
       const { error } = await supabase
