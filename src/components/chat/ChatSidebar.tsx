@@ -254,48 +254,44 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts') => vo
                 transition={{ duration: 0.12 }}
                 className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-xl shadow-lg z-50 overflow-hidden"
               >
-                <button onClick={() => { setShowMenu(false); setShowEditProfile(true); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
-                  <User className="h-4 w-4 text-primary" />
-                  <span>Chỉnh sửa Profile</span>
+                <button onClick={() => { setShowMenu(false); onShowView?.('settings'); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
+                  <Settings className="h-4 w-4 text-primary" />
+                  <span>{t('settings')}</span>
+                </button>
+                <button onClick={() => { setShowMenu(false); onShowView?.('contacts'); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
+                  <Users className="h-4 w-4 text-primary" />
+                  <span>{t('contacts')}</span>
                 </button>
                 <button onClick={async () => { setShowMenu(false); await ensureSavedMessages(); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                   <Bookmark className="h-4 w-4 text-primary" />
-                  <span>Saved Messages</span>
+                  <span>{t('savedMessages')}</span>
                 </button>
+                <div className="border-t border-border" />
                 <a href="/bots" onClick={() => setShowMenu(false)} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                   <Bot className="h-4 w-4 text-primary" />
-                  <span>Bot Management</span>
+                  <span>{t('botManagement')}</span>
                 </a>
                 <button onClick={async () => { setShowMenu(false); await openBotFatherChat(); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                   <Bot className="h-4 w-4 text-primary" />
-                  <span>🤖 BotFather</span>
+                  <span>{t('botFather')}</span>
                 </button>
                 {isAdmin && (
                   <>
                     <div className="border-t border-border" />
                     <button onClick={() => { setShowMenu(false); setShowEmailApproval(true); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                       <Mail className="h-4 w-4 text-primary" />
-                      <span>Duyệt email đăng ký</span>
+                      <span>{t('approveEmails')}</span>
                     </button>
                     <a href="/admin" onClick={() => setShowMenu(false)} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                       <Shield className="h-4 w-4 text-primary" />
-                      <span>Admin Dashboard</span>
+                      <span>{t('adminDashboard')}</span>
                     </a>
                   </>
                 )}
                 <div className="border-t border-border" />
-                <button onClick={() => { setShowMenu(false); setShowBlockedList(true); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
-                  <Ban className="h-4 w-4 text-destructive" />
-                  <span>Người dùng đã chặn</span>
-                  {blockedUsers.length > 0 && <span className="text-[10px] text-muted-foreground ml-auto">{blockedUsers.length}</span>}
-                </button>
-                <button onClick={() => { setShowMenu(false); setShowChangePassword(true); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
-                  <KeyRound className="h-4 w-4 text-primary" />
-                  <span>Đổi mật khẩu</span>
-                </button>
                 <button onClick={() => { toggleDarkMode(); setShowMenu(false); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                   {darkMode ? <Sun className="h-4 w-4 text-muted-foreground" /> : <Moon className="h-4 w-4 text-muted-foreground" />}
-                  <span>{darkMode ? 'Chế độ sáng' : 'Chế độ tối'}</span>
+                  <span>{darkMode ? t('lightMode') : t('darkMode')}</span>
                 </button>
               </motion.div>
             )}
