@@ -122,8 +122,8 @@ const SettingsView: React.FC = () => {
   }
 
   // Main settings list
-  const items = [
-    { icon: () => <ChatAvatar name={p?.display_name || 'U'} size="sm" />, label: t('profile'), subtitle: `@${p?.username || ''}`, onClick: () => setShowProfile(true), chevron: true },
+  const items: { icon?: any; customIcon?: () => React.ReactNode; label: string; subtitle?: string; onClick: () => void; chevron?: boolean }[] = [
+    { customIcon: () => <ChatAvatar name={p?.display_name || 'U'} size="sm" />, label: t('profile'), subtitle: `@${p?.username || ''}`, onClick: () => setShowProfile(true), chevron: true },
     { icon: Globe, label: t('language'), subtitle: lang === 'vi' ? '🇻🇳 Tiếng Việt' : '🇬🇧 English', onClick: () => setShowLanguage(true), chevron: true },
     { icon: KeyRound, label: t('changePassword'), onClick: () => setShowChangePassword(true) },
     { icon: Ban, label: `${t('blockedUsers')} (${blockedUsers.length})`, onClick: () => setShowBlocked(true), chevron: true },
@@ -138,27 +138,21 @@ const SettingsView: React.FC = () => {
       <div className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="px-2 space-y-1">
           {items.map((item, i) => {
-            const isCustomIcon = typeof item.icon === 'function' && !item.icon.prototype;
-            // Check if it's a component (capitalized) or render function
-            const IconOrRender = item.icon;
+            const Icon = item.icon;
             return (
               <button
                 key={i}
                 onClick={item.onClick}
                 className="flex items-center gap-3 w-full px-4 py-3 rounded-xl hover:bg-tg-hover transition-colors text-left"
               >
-                {typeof IconOrRender === 'function' && 'displayName' in IconOrRender ? (
-                  <IconOrRender className="h-5 w-5 text-primary" />
-                ) : typeof IconOrRender === 'function' ? (
-                  (IconOrRender as () => React.ReactNode)()
-                ) : null}
+                {item.customIcon ? item.customIcon() : Icon ? <Icon className="h-5 w-5 text-primary" /> : null}
                 <div className="flex-1 min-w-0">
                   <span className="text-sm font-medium block">{item.label}</span>
-                  {'subtitle' in item && item.subtitle && (
+                  {item.subtitle && (
                     <span className="text-xs text-muted-foreground">{item.subtitle}</span>
                   )}
                 </div>
-                {'chevron' in item && item.chevron && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+                {item.chevron && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
               </button>
             );
           })}
