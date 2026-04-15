@@ -30,7 +30,7 @@ interface ConversationWithDetails {
   created_by?: string | null;
 }
 
-const ChatSidebar: React.FC = () => {
+const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts') => void }> = ({ onShowView }) => {
   const {
     conversations, activeConversationId, setActiveConversation,
     searchQuery, setSearchQuery, darkMode, toggleDarkMode,
@@ -39,6 +39,7 @@ const ChatSidebar: React.FC = () => {
     cancelFriendRequest, removeFriend, blockUser, unblockUser, isBlocked, isBlockedBy, blockedUsers,
   } = useChatContext();
   const { user, signOut, isAdmin } = useAuth();
+  const { t } = useLanguage();
   const [showNewChat, setShowNewChat] = React.useState(false);
   const [showMenu, setShowMenu] = React.useState(false);
   const [showEmailApproval, setShowEmailApproval] = React.useState(false);
