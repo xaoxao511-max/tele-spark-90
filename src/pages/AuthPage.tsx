@@ -58,7 +58,7 @@ const AuthPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="text-center mb-8">
           <img src={logoImg} alt="Chim Cu Gáy" className="w-14 h-14 mx-auto mb-4 drop-shadow-lg rounded-full" />
