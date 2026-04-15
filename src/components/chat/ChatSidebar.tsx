@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Search, Menu, Moon, Sun, Plus, Shield, Mail, User, Bookmark, Bell, Bot, UserPlus, Check, Clock, MessageCircle, UserMinus, XCircle, Ban, Eye, X, KeyRound } from 'lucide-react';
+import { Search, Menu, Moon, Sun, Plus, Shield, Mail, User, Bookmark, Bell, Bot, UserPlus, Check, Clock, MessageCircle, UserMinus, XCircle, Ban, Eye, X, KeyRound, Settings, Users } from 'lucide-react';
 import { useChatContext } from '@/context/ChatContext';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 import ChatAvatar from './ChatAvatar';
 import { formatTime } from '@/lib/chatUtils';
 import { cn } from '@/lib/utils';
