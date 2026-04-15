@@ -81,7 +81,7 @@ const ChatLayout: React.FC = () => {
       case 'chat':
         return (
           <div className="flex-1 h-full min-w-0">
-            <ChatSidebar />
+            <ChatSidebar onShowView={(view) => setMobileTab(view as MobileTab)} />
           </div>
         );
       case 'contacts':
