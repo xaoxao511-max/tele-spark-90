@@ -123,7 +123,7 @@ const SettingsView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
 
   // Main settings list
   const items: { icon?: any; customIcon?: () => React.ReactNode; label: string; subtitle?: string; onClick: () => void; chevron?: boolean }[] = [
-    { customIcon: () => <ChatAvatar name={p?.display_name || 'U'} size="sm" />, label: t('profile'), subtitle: `@${p?.username || ''}`, onClick: () => setShowProfile(true), chevron: true },
+    { icon: Globe, label: t('language'), subtitle: lang === 'vi' ? '🇻🇳 Tiếng Việt' : '🇬🇧 English', onClick: () => setShowLanguage(true), chevron: true },
     { icon: Globe, label: t('language'), subtitle: lang === 'vi' ? '🇻🇳 Tiếng Việt' : '🇬🇧 English', onClick: () => setShowLanguage(true), chevron: true },
     { icon: KeyRound, label: t('changePassword'), onClick: () => setShowChangePassword(true) },
     { icon: Ban, label: `${t('blockedUsers')} (${blockedUsers.length})`, onClick: () => setShowBlocked(true), chevron: true },
