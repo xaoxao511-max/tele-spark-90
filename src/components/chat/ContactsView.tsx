@@ -85,7 +85,7 @@ const ContactsView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
             <div className="space-y-1">
               {filteredFriends.map(f => (
                 <div key={f.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-tg-hover transition-colors">
-                  <ChatAvatar name={f.display_name} online={f.online ?? false} size="md" />
+                  <ChatAvatar name={f.display_name} avatar={f.avatar_url || undefined} online={f.online ?? false} size="md" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{f.display_name}</p>
                     <p className="text-xs text-muted-foreground truncate">@{f.username}</p>
@@ -114,7 +114,7 @@ const ContactsView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
                   if (!p) return null;
                   return (
                     <div key={r.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-tg-hover transition-colors">
-                      <ChatAvatar name={p.display_name} size="md" />
+                      <ChatAvatar name={p.display_name} avatar={p.avatar_url || undefined} size="md" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{p.display_name}</p>
                         <p className="text-xs text-muted-foreground">@{p.username}</p>
@@ -140,7 +140,7 @@ const ContactsView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
                   if (!p) return null;
                   return (
                     <div key={r.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-tg-hover transition-colors">
-                      <ChatAvatar name={p.display_name} size="md" />
+                      <ChatAvatar name={p.display_name} avatar={p.avatar_url || undefined} size="md" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{p.display_name}</p>
                         <p className="text-xs text-muted-foreground">@{p.username}</p>
@@ -171,7 +171,7 @@ const ContactsView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
                 const status = !fs ? 'none' : fs.status === 'accepted' ? 'friend' : fs.requester_id === user?.id ? 'sent' : 'received';
                 return (
                   <div key={p.id} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-tg-hover transition-colors">
-                    <ChatAvatar name={p.display_name} online={p.online ?? false} size="md" />
+                    <ChatAvatar name={p.display_name} avatar={p.avatar_url || undefined} online={p.online ?? false} size="md" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{p.display_name}</p>
                       <p className="text-xs text-muted-foreground">@{p.username}</p>

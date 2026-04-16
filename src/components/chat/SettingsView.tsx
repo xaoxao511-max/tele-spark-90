@@ -100,7 +100,7 @@ const SettingsView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
                 if (!bp) return null;
                 return (
                   <div key={uid} className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-tg-hover transition-colors">
-                    <ChatAvatar name={bp.display_name} size="sm" />
+                    <ChatAvatar name={bp.display_name} avatar={bp.avatar_url || undefined} size="sm" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{bp.display_name}</p>
                       <p className="text-xs text-muted-foreground">@{bp.username}</p>
