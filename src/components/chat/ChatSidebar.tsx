@@ -457,7 +457,7 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts') => vo
         <button onClick={signOut} className="text-xs text-muted-foreground hover:text-destructive transition-colors">Đăng xuất</button>
       </div>
 
-      {showNewChat && <NewChatDialog onClose={() => setShowNewChat(false)} />}
+      {showNewChat && <NewChatDialog onClose={() => setShowNewChat(false)} defaultTab="group" />}
       {showEmailApproval && <AdminEmailApproval onClose={() => setShowEmailApproval(false)} />}
       {showEditProfile && <EditProfileDialog onClose={() => setShowEditProfile(false)} />}
       {showChangePassword && <ChangePasswordDialog onClose={() => setShowChangePassword(false)} />}
