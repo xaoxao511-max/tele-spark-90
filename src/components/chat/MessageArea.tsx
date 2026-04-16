@@ -1026,7 +1026,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
           <ArrowLeft className="h-5 w-5 text-muted-foreground" />
         </button>
         <div className="cursor-pointer flex-shrink-0" onClick={handleAvatarClick}>
-          <ChatAvatar name={getConvName()} online={getOtherOnline()} size="sm" isBot={(() => {
+          <ChatAvatar name={getConvName()} avatar={(() => { if (activeConversation.type === 'private' && user) { const other = activeConversation.members.find(m => m.user_id !== user.id); return other ? profiles[other.user_id]?.avatar_url || undefined : undefined; } return activeConversation.avatar_url || undefined; })()} online={getOtherOnline()} size="sm" isBot={(() => {
             if (activeConversation.type === 'private' && user) {
               const other = activeConversation.members.find(m => m.user_id !== user.id);
               return other ? !!profiles[other.user_id]?.is_bot : false;
@@ -1184,7 +1184,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
                 >
                   {!isOwn && (
                     <div className="w-8 flex-shrink-0 cursor-pointer" onClick={() => setViewProfileId(msg.sender_id)}>
-                      {showAvatar && sender && <ChatAvatar name={sender.display_name} size="sm" />}
+                      {showAvatar && sender && <ChatAvatar name={sender.display_name} avatar={sender.avatar_url || undefined} size="sm" />}
                     </div>
                   )}
                   <div

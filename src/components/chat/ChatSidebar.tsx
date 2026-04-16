@@ -354,7 +354,7 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts' | 'pro
                   c.id === activeConversationId ? 'bg-primary/10' : 'hover:bg-tg-hover'
                 )}
               >
-                <ChatAvatar name={c.name === 'Saved Messages' ? 'Saved' : getConversationName(c).replace('📌 ', '').replace('👥 ', '').replace('📢 ', '')} online={getOtherMemberOnline(c)} size="md" isBot={c.type === 'private' && c.name !== 'Saved Messages' && !!c.members.find(m => m.user_id !== user?.id && profiles[m.user_id]?.is_bot)} />
+                <ChatAvatar name={c.name === 'Saved Messages' ? 'Saved' : getConversationName(c).replace('📌 ', '').replace('👥 ', '').replace('📢 ', '')} avatar={(() => { if (c.type === 'private' && c.name !== 'Saved Messages' && user) { const other = c.members.find(m => m.user_id !== user.id); return other ? profiles[other.user_id]?.avatar_url || undefined : undefined; } return c.avatar_url || undefined; })()} online={getOtherMemberOnline(c)} size="md" isBot={c.type === 'private' && c.name !== 'Saved Messages' && !!c.members.find(m => m.user_id !== user?.id && profiles[m.user_id]?.is_bot)} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-sm truncate">
@@ -396,7 +396,7 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts' | 'pro
                   key={p.id}
                   className="flex items-center gap-2 px-4 py-2.5 transition-colors hover:bg-tg-hover"
                 >
-                  <ChatAvatar name={p.display_name} online={p.online ?? false} size="md" />
+                  <ChatAvatar name={p.display_name} avatar={p.avatar_url || undefined} online={p.online ?? false} size="md" />
                   <div className="flex-1 min-w-0 mr-1">
                     <p className="text-sm font-medium truncate">{p.display_name}</p>
                     <p className="text-xs text-muted-foreground truncate">@{p.username}</p>
@@ -453,7 +453,7 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts' | 'pro
 
       {/* Footer */}
       <div className="border-t border-border px-4 py-3 flex items-center gap-3">
-        <ChatAvatar name={profiles[user?.id || '']?.display_name || 'User'} online={true} size="sm" />
+        <ChatAvatar name={profiles[user?.id || '']?.display_name || 'User'} avatar={profiles[user?.id || '']?.avatar_url || undefined} online={true} size="sm" />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium truncate">{profiles[user?.id || '']?.display_name || 'User'}</p>
           <p className="text-xs text-muted-foreground truncate">@{profiles[user?.id || '']?.username}</p>
@@ -509,7 +509,7 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts' | 'pro
                     if (!p) return null;
                     return (
                       <div key={uid} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-secondary/50">
-                        <ChatAvatar name={p.display_name} size="sm" />
+                        <ChatAvatar name={p.display_name} avatar={p.avatar_url || undefined} size="sm" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">{p.display_name}</p>
                           <p className="text-xs text-muted-foreground">@{p.username}</p>
