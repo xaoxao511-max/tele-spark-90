@@ -30,7 +30,7 @@ interface ConversationWithDetails {
   created_by?: string | null;
 }
 
-const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts') => void }> = ({ onShowView }) => {
+const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts' | 'profile') => void }> = ({ onShowView }) => {
   const {
     conversations, activeConversationId, setActiveConversation,
     searchQuery, setSearchQuery, darkMode, toggleDarkMode,
@@ -254,6 +254,10 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts') => vo
                 transition={{ duration: 0.12 }}
                 className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-xl shadow-lg z-50 overflow-hidden"
               >
+                <button onClick={() => { setShowMenu(false); onShowView?.('profile'); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
+                  <User className="h-4 w-4 text-primary" />
+                  <span>{t('profile')}</span>
+                </button>
                 <button onClick={() => { setShowMenu(false); onShowView?.('settings'); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                   <Settings className="h-4 w-4 text-primary" />
                   <span>{t('settings')}</span>

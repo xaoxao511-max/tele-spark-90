@@ -20,7 +20,7 @@ const ChatLayout: React.FC = () => {
   const { user } = useAuth();
   const isMobile = useIsMobile();
   const [mobileTab, setMobileTab] = useState<MobileTab>('chat');
-  const [sidebarView, setSidebarView] = useState<'chat' | 'settings' | 'contacts'>('chat');
+  const [sidebarView, setSidebarView] = useState<'chat' | 'settings' | 'contacts' | 'profile'>('chat');
 
   const handleIncomingCall = useCallback((callerId: string, callerName: string, callType: CallType) => {
     toast.info(`${callerName} đang gọi...`);
@@ -117,6 +117,8 @@ const ChatLayout: React.FC = () => {
                 <SettingsView onBack={() => setSidebarView('chat')} />
               ) : sidebarView === 'contacts' ? (
                 <ContactsView onBack={() => setSidebarView('chat')} />
+              ) : sidebarView === 'profile' ? (
+                <ProfileTab onBack={() => setSidebarView('chat')} />
               ) : (
                 <ChatSidebar onShowView={(view) => setSidebarView(view)} />
               )}

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Edit2 } from 'lucide-react';
+import { Edit2, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useChatContext } from '@/context/ChatContext';
 import ChatAvatar from './ChatAvatar';
 import EditProfileDialog from './EditProfileDialog';
 
-const ProfileTab: React.FC = () => {
+const ProfileTab: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
   const { user, profile } = useAuth();
   const { profiles } = useChatContext();
   const [showEdit, setShowEdit] = useState(false);
@@ -14,8 +14,13 @@ const ProfileTab: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full bg-tg-sidebar">
-      <div className="px-4 pt-4 pb-2">
-        <h2 className="font-display font-semibold text-lg mb-3">Hồ sơ</h2>
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+        {onBack && (
+          <button onClick={onBack} className="p-2 rounded-lg hover:bg-tg-hover transition-colors">
+            <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+          </button>
+        )}
+        <h2 className="font-display font-semibold text-lg">Hồ sơ</h2>
       </div>
       <div className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="flex flex-col items-center px-6 py-8">
