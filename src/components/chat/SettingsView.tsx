@@ -9,7 +9,7 @@ import EditProfileDialog from './EditProfileDialog';
 import ProfileViewDialog from './ProfileViewDialog';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const SettingsView: React.FC = () => {
+const SettingsView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
   const { darkMode, toggleDarkMode, blockedUsers, profiles, unblockUser } = useChatContext();
   const { signOut, user, profile } = useAuth();
   const { lang, setLang, t } = useLanguage();
@@ -132,8 +132,13 @@ const SettingsView: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full bg-tg-sidebar">
-      <div className="px-4 pt-4 pb-2">
-        <h2 className="font-display font-semibold text-lg mb-3">{t('settings')}</h2>
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+        {onBack && (
+          <button onClick={onBack} className="p-2 rounded-lg hover:bg-tg-hover transition-colors">
+            <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+          </button>
+        )}
+        <h2 className="font-display font-semibold text-lg">{t('settings')}</h2>
       </div>
       <div className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="px-2 space-y-1">

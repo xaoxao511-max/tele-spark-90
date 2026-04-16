@@ -114,27 +114,9 @@ const ChatLayout: React.FC = () => {
           <>
             <div className="h-full flex-shrink-0 border-r border-border w-80">
               {sidebarView === 'settings' ? (
-                <div className="flex flex-col h-full">
-                  <div className="flex items-center gap-2 px-4 py-2 border-b border-border">
-                    <button onClick={() => setSidebarView('chat')} className="p-2 rounded-lg hover:bg-tg-hover transition-colors">
-                      <span className="text-muted-foreground text-sm">← Back</span>
-                    </button>
-                  </div>
-                  <div className="flex-1 min-h-0">
-                    <SettingsView />
-                  </div>
-                </div>
+                <SettingsView onBack={() => setSidebarView('chat')} />
               ) : sidebarView === 'contacts' ? (
-                <div className="flex flex-col h-full">
-                  <div className="flex items-center gap-2 px-4 py-2 border-b border-border">
-                    <button onClick={() => setSidebarView('chat')} className="p-2 rounded-lg hover:bg-tg-hover transition-colors">
-                      <span className="text-muted-foreground text-sm">← Back</span>
-                    </button>
-                  </div>
-                  <div className="flex-1 min-h-0">
-                    <ContactsView />
-                  </div>
-                </div>
+                <ContactsView onBack={() => setSidebarView('chat')} />
               ) : (
                 <ChatSidebar onShowView={(view) => setSidebarView(view)} />
               )}

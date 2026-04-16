@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Search, UserPlus, MessageCircle, UserMinus, Check, XCircle, Eye } from 'lucide-react';
+import { Search, UserPlus, MessageCircle, UserMinus, Check, XCircle, Eye, ArrowLeft } from 'lucide-react';
 import { useChatContext } from '@/context/ChatContext';
 import { useAuth } from '@/context/AuthContext';
 import ChatAvatar from './ChatAvatar';
 import ProfileViewDialog from './ProfileViewDialog';
 import { cn } from '@/lib/utils';
 
-const ContactsView: React.FC = () => {
+const ContactsView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
   const { friends, profiles, pendingRequests, acceptFriendRequest, declineFriendRequest, removeFriend, getFriendshipWith, createPrivateChat, setActiveConversation, allProfiles, sendFriendRequest, cancelFriendRequest, isBlocked, isBlockedBy } = useChatContext();
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,7 +41,14 @@ const ContactsView: React.FC = () => {
   return (
     <div className="flex flex-col h-full bg-tg-sidebar">
       <div className="px-4 pt-4 pb-2">
-        <h2 className="font-display font-semibold text-lg mb-3">Danh bạ</h2>
+        <div className="flex items-center gap-2 mb-3">
+          {onBack && (
+            <button onClick={onBack} className="p-2 rounded-lg hover:bg-tg-hover transition-colors">
+              <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+            </button>
+          )}
+          <h2 className="font-display font-semibold text-lg">Danh bạ</h2>
+        </div>
         <div className="relative mb-3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
