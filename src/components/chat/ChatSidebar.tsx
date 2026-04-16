@@ -262,6 +262,10 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts') => vo
                   <Users className="h-4 w-4 text-primary" />
                   <span>{t('contacts')}</span>
                 </button>
+                <button onClick={() => { setShowMenu(false); setShowNewChat(true); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
+                  <Plus className="h-4 w-4 text-primary" />
+                  <span>Tạo nhóm mới</span>
+                </button>
                 <button onClick={async () => { setShowMenu(false); await ensureSavedMessages(); }} className="flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-tg-hover transition-colors text-left">
                   <Bookmark className="h-4 w-4 text-primary" />
                   <span>{t('savedMessages')}</span>
@@ -320,12 +324,6 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts') => vo
         </button>
       </div>
 
-      {/* New Chat Button */}
-      <div className="px-4 py-2">
-        <button onClick={() => setShowNewChat(true)} className="w-full flex items-center gap-2 px-3 py-2 rounded-xl bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors">
-          <Plus className="h-4 w-4" /> Cuộc trò chuyện mới
-        </button>
-      </div>
 
       {/* Conversation List */}
       <div className="flex-1 overflow-y-auto scrollbar-thin">
@@ -459,7 +457,7 @@ const ChatSidebar: React.FC<{ onShowView?: (view: 'settings' | 'contacts') => vo
         <button onClick={signOut} className="text-xs text-muted-foreground hover:text-destructive transition-colors">Đăng xuất</button>
       </div>
 
-      {showNewChat && <NewChatDialog onClose={() => setShowNewChat(false)} />}
+      {showNewChat && <NewChatDialog onClose={() => setShowNewChat(false)} defaultTab="group" />}
       {showEmailApproval && <AdminEmailApproval onClose={() => setShowEmailApproval(false)} />}
       {showEditProfile && <EditProfileDialog onClose={() => setShowEditProfile(false)} />}
       {showChangePassword && <ChangePasswordDialog onClose={() => setShowChangePassword(false)} />}
