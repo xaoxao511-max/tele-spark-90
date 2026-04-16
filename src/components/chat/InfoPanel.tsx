@@ -100,7 +100,7 @@ const InfoPanel: React.FC = () => {
             </div>
 
             <div className="flex flex-col items-center py-6 px-4">
-              <ChatAvatar name={getConvName()} online={getOtherOnline()} size="lg" />
+              <ChatAvatar name={getConvName()} avatar={(() => { if (activeConversation.type === 'private' && user) { const other = activeConversation.members.find(m => m.user_id !== user.id); return other ? profiles[other.user_id]?.avatar_url || undefined : undefined; } return activeConversation.avatar_url || undefined; })()} online={getOtherOnline()} size="lg" />
               <h4 className="mt-3 font-semibold text-lg">{getConvName()}</h4>
               {activeConversation.type !== 'private' && (
                 <p className="text-sm text-muted-foreground mt-1">{activeConversation.members.length} thành viên / members</p>
@@ -159,7 +159,7 @@ const InfoPanel: React.FC = () => {
                               onClick={() => handleAddMember(f.id)}
                               className="flex items-center gap-2 w-full px-2 py-1.5 rounded-lg hover:bg-tg-hover transition-colors"
                             >
-                              <ChatAvatar name={f.display_name} online={f.online ?? false} size="sm" />
+                              <ChatAvatar name={f.display_name} avatar={f.avatar_url || undefined} online={f.online ?? false} size="sm" />
                               <div className="flex-1 text-left min-w-0">
                                 <p className="text-xs font-medium truncate">{f.display_name}</p>
                                 <p className="text-[10px] text-muted-foreground">@{f.username}</p>
@@ -179,7 +179,7 @@ const InfoPanel: React.FC = () => {
                     if (!p) return null;
                     return (
                       <div key={m.user_id} onClick={() => setViewProfileId(m.user_id)} className="flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-tg-hover transition-colors cursor-pointer">
-                        <ChatAvatar name={p.display_name} online={p.online ?? false} size="sm" />
+                        <ChatAvatar name={p.display_name} avatar={p.avatar_url || undefined} online={p.online ?? false} size="sm" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">{p.display_name}</p>
                           <p className="text-xs text-muted-foreground">{p.online ? 'online' : 'offline'}</p>
