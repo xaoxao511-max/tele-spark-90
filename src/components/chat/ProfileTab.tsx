@@ -22,7 +22,6 @@ const ProfileTab: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
         )}
         <h2 className="font-display font-semibold text-lg">Hồ sơ</h2>
       </div>
-      </div>
       <div className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="flex flex-col items-center px-6 py-8">
           <ChatAvatar name={p?.display_name || 'U'} avatar={p?.avatar_url || undefined} online={true} size="lg" />
