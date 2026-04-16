@@ -79,7 +79,6 @@ const EditProfileDialog: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     } else {
       toast.success('Đã cập nhật profile');
       onClose();
-      window.location.reload();
     }
     setSaving(false);
   };
