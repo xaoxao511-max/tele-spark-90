@@ -566,6 +566,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
       const caption = input.trim() || null;
       const replyId = replyTo?.id || null;
 
+      // Group multiple media (image/video) sent together into an album via media_group_id
+      const mediaCount = previewFiles.filter(pf => isImageType(pf.file.type) || isVideoType(pf.file.type)).length;
+      const groupId = mediaCount > 1 ? crypto.randomUUID() : null;
+
       for (let i = 0; i < previewFiles.length; i++) {
         const file = previewFiles[i].file;
         const ext = file.name.split('.').pop() || 'bin';
@@ -575,6 +579,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
 
         const { data: urlData } = supabase.storage.from('chat-files').getPublicUrl(path);
         let messageType = 'file';
+        const isMedia = isImageType(file.type) || isVideoType(file.type);
         if (isImageType(file.type)) messageType = 'image';
         else if (isVideoType(file.type)) messageType = 'video';
 
@@ -587,7 +592,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
           file_name: file.name,
           file_size: file.size,
           reply_to: i === 0 ? replyId : null,
-        })), 15000, 'MESSAGE_INSERT_TIMEOUT');
+          media_group_id: isMedia ? groupId : null,
+        } as any)), 15000, 'MESSAGE_INSERT_TIMEOUT');
         if (msgError) throw msgError;
       }
 

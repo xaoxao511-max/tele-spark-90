@@ -734,7 +734,8 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       file_url: null,
       file_name: null,
       file_size: null,
-    };
+      media_group_id: null,
+    } as Message;
     setMessages(prev => [...prev, optimisticMsg]);
     mergeConversationMessage(optimisticMsg);
 
