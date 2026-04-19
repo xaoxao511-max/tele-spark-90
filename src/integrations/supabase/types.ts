@@ -375,6 +375,7 @@ export type Database = {
           file_size: number | null
           file_url: string | null
           id: string
+          media_group_id: string | null
           message_type: string
           pinned: boolean | null
           reply_to: string | null
@@ -393,6 +394,7 @@ export type Database = {
           file_size?: number | null
           file_url?: string | null
           id?: string
+          media_group_id?: string | null
           message_type?: string
           pinned?: boolean | null
           reply_to?: string | null
@@ -411,6 +413,7 @@ export type Database = {
           file_size?: number | null
           file_url?: string | null
           id?: string
+          media_group_id?: string | null
           message_type?: string
           pinned?: boolean | null
           reply_to?: string | null
