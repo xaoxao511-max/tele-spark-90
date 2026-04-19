@@ -1777,14 +1777,27 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
 
       {viewProfileId && <ProfileViewDialog userId={viewProfileId} onClose={() => setViewProfileId(null)} />}
       {showMediaGallery && <MediaGalleryDialog onClose={() => setShowMediaGallery(false)} />}
-      {lightboxImage && (
-        <ImageLightbox
-          src={lightboxImage}
-          allImages={messages.filter(m => m.message_type === 'image' && m.file_url).map(m => ({ src: m.file_url!, alt: m.file_name || '' }))}
-          initialIndex={messages.filter(m => m.message_type === 'image' && m.file_url).findIndex(m => m.file_url === lightboxImage)}
-          onClose={() => setLightboxImage(null)}
-        />
-      )}
+      {lightboxImage && (() => {
+        const albumOrAll = lightboxAlbum && lightboxAlbum.length > 0
+          ? lightboxAlbum
+          : messages.filter(m => m.message_type === 'image' && m.file_url).map(m => ({ src: m.file_url!, alt: m.file_name || '' }));
+        const initIdx = albumOrAll.findIndex(img => img.src === lightboxImage);
+        return (
+          <ImageLightbox
+            src={lightboxImage}
+            allImages={albumOrAll}
+            initialIndex={initIdx >= 0 ? initIdx : 0}
+            onClose={() => { setLightboxImage(null); setLightboxAlbum(null); }}
+            onEdited={(file) => {
+              const url = URL.createObjectURL(file);
+              setPreviewFiles(prev => [...prev, { file, url }]);
+              setLightboxImage(null);
+              setLightboxAlbum(null);
+              toast.success('Ảnh đã chỉnh sửa - bấm Gửi để gửi đi');
+            }}
+          />
+        );
+      })()}
       {miniApp && (
         <MiniAppDialog
           url={miniApp.url}
