@@ -179,6 +179,45 @@ const VoiceMessagePlayer: React.FC<{ url: string; duration?: number }> = ({ url,
   );
 };
 
+const MediaAlbumGrid: React.FC<{
+  items: any[];
+  onImageClick: (url: string, allUrls: { src: string; alt?: string }[]) => void;
+}> = ({ items, onImageClick }) => {
+  const count = items.length;
+  // Layout based on count (Telegram style)
+  const gridCls =
+    count === 2 ? 'grid-cols-2' :
+    count === 3 ? 'grid-cols-2' :
+    count === 4 ? 'grid-cols-2' :
+    'grid-cols-3';
+  const allUrls = items
+    .filter(it => it.message_type === 'image' && it.file_url)
+    .map(it => ({ src: it.file_url as string, alt: it.file_name || '' }));
+
+  return (
+    <div className={cn('grid gap-1 max-w-xs', gridCls)} style={{ width: count === 1 ? 'auto' : 280 }}>
+      {items.map((it, idx) => {
+        // For 3 items: first item spans full width
+        const spanFull = count === 3 && idx === 0;
+        return (
+          <div
+            key={it.id}
+            className={cn('relative overflow-hidden rounded-lg cursor-pointer aspect-square bg-black/20', spanFull && 'col-span-2 aspect-video')}
+            onClick={() => it.message_type === 'image' && it.file_url && onImageClick(it.file_url, allUrls)}
+          >
+            {it.message_type === 'image' && it.file_url && (
+              <img src={it.file_url} alt={it.file_name || ''} className="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+            )}
+            {it.message_type === 'video' && it.file_url && (
+              <video src={it.file_url} className="w-full h-full object-cover" controls />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const MessageBubbleFile: React.FC<{ msg: any; isOwn: boolean; onImageClick?: (url: string) => void }> = ({ msg, isOwn, onImageClick }) => {
   const fileUrl = msg.file_url;
   const fileName = msg.file_name || 'file';
