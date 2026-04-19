@@ -312,6 +312,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
   const [showInlineResults, setShowInlineResults] = useState(false);
   const [miniApp, setMiniApp] = useState<{ url: string; botName: string; botId?: string } | null>(null);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [lightboxAlbum, setLightboxAlbum] = useState<{ src: string; alt?: string }[] | null>(null);
   const [showTransferDialog, setShowTransferDialog] = useState(false);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -1201,6 +1202,15 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
         ) : (
           <AnimatePresence initial={false}>
             {visibleMessages.map((msg, i) => {
+              // Album grouping: if this msg is part of a media_group and not the first of the group, skip
+              const groupId = (msg as any).media_group_id;
+              if (groupId) {
+                const firstIdxInGroup = visibleMessages.findIndex(m => (m as any).media_group_id === groupId);
+                if (firstIdxInGroup !== i) return null;
+              }
+              const albumItems = groupId
+                ? visibleMessages.filter(m => (m as any).media_group_id === groupId)
+                : null;
               const isOwn = msg.sender_id === user?.id;
               const showAvatar = !isOwn && (i === 0 || visibleMessages[i - 1].sender_id !== msg.sender_id);
               const sender = profiles[msg.sender_id];
@@ -1336,8 +1346,16 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
                           return null;
                         })()}
                       </div>
+                    ) : albumItems && albumItems.length > 1 ? (
+                      <>
+                        <MediaAlbumGrid
+                          items={albumItems}
+                          onImageClick={(url, allUrls) => { setLightboxAlbum(allUrls); setLightboxImage(url); }}
+                        />
+                        {msg.content && <p className="mt-1 whitespace-pre-wrap break-words text-sm">{msg.content}</p>}
+                      </>
                     ) : (
-                      <MessageBubbleFile msg={msg} isOwn={isOwn} onImageClick={(url) => setLightboxImage(url)} />
+                      <MessageBubbleFile msg={msg} isOwn={isOwn} onImageClick={(url) => { setLightboxAlbum(null); setLightboxImage(url); }} />
                     )}
                     <div className={cn('flex items-center gap-1 mt-1', isOwn ? 'justify-end' : 'justify-start')}>
                       <span className="text-[10px] text-muted-foreground">{formatTime(new Date(msg.created_at))}</span>
