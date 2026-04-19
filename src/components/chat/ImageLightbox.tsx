@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, ZoomIn, ZoomOut, Download, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ZoomIn, ZoomOut, Download, ChevronLeft, ChevronRight, RotateCw, Pencil } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ImageEditor from './ImageEditor';
 
 interface ImageLightboxProps {
   src: string;
@@ -8,26 +9,48 @@ interface ImageLightboxProps {
   allImages?: { src: string; alt?: string }[];
   initialIndex?: number;
   onClose: () => void;
+  onEdited?: (file: File) => void;
 }
 
-const ImageLightbox: React.FC<ImageLightboxProps> = ({ src, alt, allImages, initialIndex = 0, onClose }) => {
+const ImageLightbox: React.FC<ImageLightboxProps> = ({ src, alt, allImages, initialIndex = 0, onClose, onEdited }) => {
   const images = allImages && allImages.length > 0 ? allImages : [{ src, alt }];
   const [index, setIndex] = useState(initialIndex);
   const [scale, setScale] = useState(1);
+  const [rotation, setRotation] = useState(0);
+  const [editing, setEditing] = useState(false);
 
   const current = images[index];
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
+      if (editing) return;
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowLeft') setIndex(i => Math.max(0, i - 1));
       if (e.key === 'ArrowRight') setIndex(i => Math.min(images.length - 1, i + 1));
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [images.length, onClose]);
+  }, [images.length, onClose, editing]);
 
-  useEffect(() => { setScale(1); }, [index]);
+  useEffect(() => { setScale(1); setRotation(0); }, [index]);
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const res = await fetch(current.src);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = current.alt || `image_${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      window.open(current.src, '_blank');
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -44,16 +67,24 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({ src, alt, allImages, init
             {images.length > 1 && `${index + 1} / ${images.length}`}
           </span>
           <div className="flex items-center gap-2">
-            <button onClick={() => setScale(s => Math.min(3, s + 0.5))} className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
+            <button onClick={() => setRotation(r => (r + 90) % 360)} title="Xoay" className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
+              <RotateCw className="h-5 w-5" />
+            </button>
+            <button onClick={() => setScale(s => Math.min(3, s + 0.5))} title="Phóng to" className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
               <ZoomIn className="h-5 w-5" />
             </button>
-            <button onClick={() => setScale(s => Math.max(0.5, s - 0.5))} className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
+            <button onClick={() => setScale(s => Math.max(0.5, s - 0.5))} title="Thu nhỏ" className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
               <ZoomOut className="h-5 w-5" />
             </button>
-            <a href={current.src} download target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
+            {onEdited && (
+              <button onClick={() => setEditing(true)} title="Chỉnh sửa" className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
+                <Pencil className="h-5 w-5" />
+              </button>
+            )}
+            <button onClick={handleDownload} title="Tải xuống" className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
               <Download className="h-5 w-5" />
-            </a>
-            <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
+            </button>
+            <button onClick={onClose} title="Đóng" className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -85,11 +116,24 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({ src, alt, allImages, init
           transition={{ duration: 0.15 }}
           src={current.src}
           alt={current.alt || ''}
-          style={{ transform: `scale(${scale})` }}
+          style={{ transform: `scale(${scale}) rotate(${rotation}deg)` }}
           className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg transition-transform duration-200 select-none"
           onClick={e => e.stopPropagation()}
           draggable={false}
         />
+
+        {/* Image editor overlay */}
+        {editing && (
+          <ImageEditor
+            src={current.src}
+            onCancel={() => setEditing(false)}
+            onDone={(file) => {
+              setEditing(false);
+              onEdited?.(file);
+              onClose();
+            }}
+          />
+        )}
       </motion.div>
     </AnimatePresence>
   );

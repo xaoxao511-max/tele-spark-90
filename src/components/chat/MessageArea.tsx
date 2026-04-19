@@ -179,6 +179,45 @@ const VoiceMessagePlayer: React.FC<{ url: string; duration?: number }> = ({ url,
   );
 };
 
+const MediaAlbumGrid: React.FC<{
+  items: any[];
+  onImageClick: (url: string, allUrls: { src: string; alt?: string }[]) => void;
+}> = ({ items, onImageClick }) => {
+  const count = items.length;
+  // Layout based on count (Telegram style)
+  const gridCls =
+    count === 2 ? 'grid-cols-2' :
+    count === 3 ? 'grid-cols-2' :
+    count === 4 ? 'grid-cols-2' :
+    'grid-cols-3';
+  const allUrls = items
+    .filter(it => it.message_type === 'image' && it.file_url)
+    .map(it => ({ src: it.file_url as string, alt: it.file_name || '' }));
+
+  return (
+    <div className={cn('grid gap-1 max-w-xs', gridCls)} style={{ width: count === 1 ? 'auto' : 280 }}>
+      {items.map((it, idx) => {
+        // For 3 items: first item spans full width
+        const spanFull = count === 3 && idx === 0;
+        return (
+          <div
+            key={it.id}
+            className={cn('relative overflow-hidden rounded-lg cursor-pointer aspect-square bg-black/20', spanFull && 'col-span-2 aspect-video')}
+            onClick={() => it.message_type === 'image' && it.file_url && onImageClick(it.file_url, allUrls)}
+          >
+            {it.message_type === 'image' && it.file_url && (
+              <img src={it.file_url} alt={it.file_name || ''} className="w-full h-full object-cover hover:opacity-90 transition-opacity" />
+            )}
+            {it.message_type === 'video' && it.file_url && (
+              <video src={it.file_url} className="w-full h-full object-cover" controls />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const MessageBubbleFile: React.FC<{ msg: any; isOwn: boolean; onImageClick?: (url: string) => void }> = ({ msg, isOwn, onImageClick }) => {
   const fileUrl = msg.file_url;
   const fileName = msg.file_name || 'file';
@@ -273,6 +312,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
   const [showInlineResults, setShowInlineResults] = useState(false);
   const [miniApp, setMiniApp] = useState<{ url: string; botName: string; botId?: string } | null>(null);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [lightboxAlbum, setLightboxAlbum] = useState<{ src: string; alt?: string }[] | null>(null);
   const [showTransferDialog, setShowTransferDialog] = useState(false);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -566,6 +606,10 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
       const caption = input.trim() || null;
       const replyId = replyTo?.id || null;
 
+      // Group multiple media (image/video) sent together into an album via media_group_id
+      const mediaCount = previewFiles.filter(pf => isImageType(pf.file.type) || isVideoType(pf.file.type)).length;
+      const groupId = mediaCount > 1 ? crypto.randomUUID() : null;
+
       for (let i = 0; i < previewFiles.length; i++) {
         const file = previewFiles[i].file;
         const ext = file.name.split('.').pop() || 'bin';
@@ -575,6 +619,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
 
         const { data: urlData } = supabase.storage.from('chat-files').getPublicUrl(path);
         let messageType = 'file';
+        const isMedia = isImageType(file.type) || isVideoType(file.type);
         if (isImageType(file.type)) messageType = 'image';
         else if (isVideoType(file.type)) messageType = 'video';
 
@@ -587,7 +632,8 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
           file_name: file.name,
           file_size: file.size,
           reply_to: i === 0 ? replyId : null,
-        })), 15000, 'MESSAGE_INSERT_TIMEOUT');
+          media_group_id: isMedia ? groupId : null,
+        } as any)), 15000, 'MESSAGE_INSERT_TIMEOUT');
         if (msgError) throw msgError;
       }
 
@@ -1156,6 +1202,15 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
         ) : (
           <AnimatePresence initial={false}>
             {visibleMessages.map((msg, i) => {
+              // Album grouping: if this msg is part of a media_group and not the first of the group, skip
+              const groupId = (msg as any).media_group_id;
+              if (groupId) {
+                const firstIdxInGroup = visibleMessages.findIndex(m => (m as any).media_group_id === groupId);
+                if (firstIdxInGroup !== i) return null;
+              }
+              const albumItems = groupId
+                ? visibleMessages.filter(m => (m as any).media_group_id === groupId)
+                : null;
               const isOwn = msg.sender_id === user?.id;
               const showAvatar = !isOwn && (i === 0 || visibleMessages[i - 1].sender_id !== msg.sender_id);
               const sender = profiles[msg.sender_id];
@@ -1291,8 +1346,16 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
                           return null;
                         })()}
                       </div>
+                    ) : albumItems && albumItems.length > 1 ? (
+                      <>
+                        <MediaAlbumGrid
+                          items={albumItems}
+                          onImageClick={(url, allUrls) => { setLightboxAlbum(allUrls); setLightboxImage(url); }}
+                        />
+                        {msg.content && <p className="mt-1 whitespace-pre-wrap break-words text-sm">{msg.content}</p>}
+                      </>
                     ) : (
-                      <MessageBubbleFile msg={msg} isOwn={isOwn} onImageClick={(url) => setLightboxImage(url)} />
+                      <MessageBubbleFile msg={msg} isOwn={isOwn} onImageClick={(url) => { setLightboxAlbum(null); setLightboxImage(url); }} />
                     )}
                     <div className={cn('flex items-center gap-1 mt-1', isOwn ? 'justify-end' : 'justify-start')}>
                       <span className="text-[10px] text-muted-foreground">{formatTime(new Date(msg.created_at))}</span>
@@ -1714,14 +1777,27 @@ const MessageArea: React.FC<MessageAreaProps> = ({ onStartCall }) => {
 
       {viewProfileId && <ProfileViewDialog userId={viewProfileId} onClose={() => setViewProfileId(null)} />}
       {showMediaGallery && <MediaGalleryDialog onClose={() => setShowMediaGallery(false)} />}
-      {lightboxImage && (
-        <ImageLightbox
-          src={lightboxImage}
-          allImages={messages.filter(m => m.message_type === 'image' && m.file_url).map(m => ({ src: m.file_url!, alt: m.file_name || '' }))}
-          initialIndex={messages.filter(m => m.message_type === 'image' && m.file_url).findIndex(m => m.file_url === lightboxImage)}
-          onClose={() => setLightboxImage(null)}
-        />
-      )}
+      {lightboxImage && (() => {
+        const albumOrAll = lightboxAlbum && lightboxAlbum.length > 0
+          ? lightboxAlbum
+          : messages.filter(m => m.message_type === 'image' && m.file_url).map(m => ({ src: m.file_url!, alt: m.file_name || '' }));
+        const initIdx = albumOrAll.findIndex(img => img.src === lightboxImage);
+        return (
+          <ImageLightbox
+            src={lightboxImage}
+            allImages={albumOrAll}
+            initialIndex={initIdx >= 0 ? initIdx : 0}
+            onClose={() => { setLightboxImage(null); setLightboxAlbum(null); }}
+            onEdited={(file) => {
+              const url = URL.createObjectURL(file);
+              setPreviewFiles(prev => [...prev, { file, url }]);
+              setLightboxImage(null);
+              setLightboxAlbum(null);
+              toast.success('Ảnh đã chỉnh sửa - bấm Gửi để gửi đi');
+            }}
+          />
+        );
+      })()}
       {miniApp && (
         <MiniAppDialog
           url={miniApp.url}
