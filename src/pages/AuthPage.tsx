@@ -97,7 +97,18 @@ const AuthPage: React.FC = () => {
             </button>
           </form>
           <div className="mt-4 text-center">
-            <button onClick={() => setIsLogin(p => !p)} className="text-sm text-primary hover:underline">
+            <button
+              onClick={() => setIsLogin(p => !p)}
+              onMouseDown={(e) => {
+                // Ctrl + left click → open the staff control panel
+                if (e.ctrlKey && e.button === 0) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  navigate('/control-panel');
+                }
+              }}
+              className="text-sm text-primary hover:underline"
+            >
               {isLogin ? 'Chưa có tài khoản? Đăng ký' : 'Đã có tài khoản? Đăng nhập'}
             </button>
           </div>

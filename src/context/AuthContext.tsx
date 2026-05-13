@@ -36,6 +36,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchProfile = useCallback(async (userId: string) => {
     const { data } = await supabase.from('profiles').select('*').eq('id', userId).single();
+    if (data?.locked) {
+      await supabase.auth.signOut();
+      setProfile(null);
+      setRoles([]);
+      setTimeout(() => {
+        import('sonner').then(({ toast }) => toast.error('Tài khoản của bạn đã bị khóa'));
+      }, 100);
+      return;
+    }
     setProfile(data);
   }, []);
 

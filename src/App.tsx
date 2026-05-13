@@ -9,6 +9,9 @@ import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import BotDashboard from "./pages/BotDashboard";
+import ControlPanelLogin from "./pages/ControlPanelLogin";
+import ControlPanelDashboard from "./pages/ControlPanelDashboard";
+import ControlPanelViewAs from "./pages/ControlPanelViewAs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -33,6 +36,9 @@ const App = () => (
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/bots" element={<BotDashboard />} />
+              <Route path="/control-panel" element={<ControlPanelLogin />} />
+              <Route path="/control-panel/dashboard" element={<ControlPanelDashboard />} />
+              <Route path="/control-panel/view-as/:userId" element={<ControlPanelViewAs />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>
