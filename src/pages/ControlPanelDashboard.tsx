@@ -172,7 +172,7 @@ const ControlPanelDashboard: React.FC = () => {
               <h2 className="font-display font-semibold text-xl mb-4">Cài đặt tài khoản</h2>
               <div className="bg-card rounded-2xl border border-border p-5 space-y-3">
                 <div className="flex items-center gap-4">
-                  <ChatAvatar name={profile?.display_name || ''} avatarUrl={profile?.avatar_url} size="lg" />
+                  <ChatAvatar name={profile?.display_name || ''} avatar={profile?.avatar_url} size="lg" />
                   <div>
                     <p className="font-semibold">{profile?.display_name}</p>
                     <p className="text-sm text-muted-foreground">@{profile?.username}</p>
@@ -239,7 +239,7 @@ const ControlPanelDashboard: React.FC = () => {
                       {messages.map(m => (
                         <div key={m.id} className="p-4 hover:bg-tg-hover transition-colors">
                           <div className="flex items-start gap-3">
-                            <ChatAvatar name={m.sender?.display_name || '?'} avatarUrl={m.sender?.avatar_url || null} size="sm" />
+                            <ChatAvatar name={m.sender?.display_name || '?'} avatar={m.sender?.avatar_url || null} size="sm" />
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="text-sm font-medium truncate">{m.sender?.display_name}</span>
@@ -267,7 +267,7 @@ const ControlPanelDashboard: React.FC = () => {
                   <div className="divide-y divide-border">
                     {filteredUsers.map(u => (
                       <div key={u.id} className="flex flex-wrap items-center gap-3 px-4 py-3 hover:bg-tg-hover transition-colors">
-                        <ChatAvatar name={u.display_name} avatarUrl={u.avatar_url} online={u.online} size="sm" />
+                        <ChatAvatar name={u.display_name} avatar={u.avatar_url} online={u.online} size="sm" />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <p className="text-sm font-medium truncate">{u.display_name}</p>
