@@ -13,6 +13,7 @@ import { Navigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useWebRTC, type CallType } from '@/hooks/useWebRTC';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { toast } from 'sonner';
 
 const ChatLayout: React.FC = () => {
@@ -30,6 +31,9 @@ const ChatLayout: React.FC = () => {
     userId: user?.id || '',
     onIncomingCall: handleIncomingCall,
   });
+
+  // Đăng ký push notification trên native (iOS/Android)
+  usePushNotifications(user?.id);
 
   const getRemoteName = () => {
     if (webrtc.remoteUserId && profiles[webrtc.remoteUserId]) {
