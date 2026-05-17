@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "134157235991",
+    "project_id": "chim-cu-gay",
+    "storage_bucket": "chim-cu-gay.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134157235991:android:37b5a9d90488767fbd6952",
+        "android_client_info": {
+          "package_name": "app.lovable.chimcugay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB_lgUTRdbYyAt4nCUf-bRQL9Y10STJwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
