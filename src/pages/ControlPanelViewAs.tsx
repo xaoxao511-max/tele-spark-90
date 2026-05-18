@@ -79,8 +79,14 @@ const ControlPanelViewAs: React.FC = () => {
 
   const getConvDisplay = (c: Conv) => {
     if (c.type !== 'private') return { name: c.name || 'Group', avatar: c.avatar_url };
-    const otherId = members.find(m => m.conversation_id === c.id && m.user_id !== userId)?.user_id;
-    const p = otherId ? profiles[otherId] : null;
+    const convMembers = members.filter(m => m.conversation_id === c.id);
+    const otherId = convMembers.find(m => m.user_id !== userId)?.user_id;
+    // Saved Messages: chat với chính mình (chỉ có 1 member = userId)
+    if (!otherId) {
+      const self = profiles[userId!];
+      return { name: 'Tin nhắn đã lưu', avatar: self?.avatar_url || null, online: false };
+    }
+    const p = profiles[otherId];
     return { name: p?.display_name || 'Unknown', avatar: p?.avatar_url || null, online: p?.online };
   };
 
