@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Sun, Moon } from 'lucide-react';
 import logoImg from '@/assets/logo.png';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useTheme } from '@/hooks/useTheme';
 
 const AuthPage: React.FC = () => {
   const { user, loading: authLoading, signIn, signUp } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -58,10 +60,18 @@ const AuthPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 relative">
+      <button
+        type="button"
+        onClick={toggleTheme}
+        aria-label={isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'}
+        className="absolute top-4 right-4 h-10 w-10 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors shadow-sm"
+      >
+        {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      </button>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="text-center mb-8">
-          <img src={logoImg} alt="Chim Cu Gáy" className="w-14 h-14 mx-auto mb-4 drop-shadow-lg rounded-full" />
+          <img src={logoImg} alt="Chim Cu Gáy" className="w-20 h-20 mx-auto mb-4 drop-shadow-xl rounded-2xl ring-1 ring-border" />
           <h1 className="text-2xl font-display font-bold">Chim Cu Gáy</h1>
           <p className="text-muted-foreground text-sm mt-1">{isLogin ? 'Đăng nhập để tiếp tục' : 'Tạo tài khoản mới'}</p>
         </div>
