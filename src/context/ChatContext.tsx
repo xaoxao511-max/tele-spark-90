@@ -151,7 +151,13 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [messages, setMessages] = useState<Message[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showInfoPanel, setShowInfoPanel] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const stored = localStorage.getItem('app-theme');
+    if (stored === 'light') return false;
+    if (stored === 'dark') return true;
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true;
+  });
   const [loadingConversations, setLoadingConversations] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [profiles, setProfiles] = useState<Record<string, Profile>>({});
@@ -207,6 +213,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
+    localStorage.setItem('app-theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
 
   // Request browser notification permission
