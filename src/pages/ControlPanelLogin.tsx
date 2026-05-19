@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
-import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Shield, Eye, EyeOff, Loader2, Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTheme } from '@/hooks/useTheme';
+import logoImg from '@/assets/logo.png';
 
 const ControlPanelLogin: React.FC = () => {
   const navigate = useNavigate();
   const { user, roles, loading } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -46,11 +49,22 @@ const ControlPanelLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-primary/5 relative">
+      <button
+        type="button"
+        onClick={toggleTheme}
+        aria-label={isDark ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'}
+        className="absolute top-4 right-4 h-10 w-10 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors shadow-sm"
+      >
+        {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      </button>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <Shield className="h-8 w-8 text-primary" />
+          <div className="relative w-20 h-20 mx-auto mb-4">
+            <img src={logoImg} alt="Chim Cu Gáy" className="w-20 h-20 rounded-2xl ring-1 ring-primary/30 shadow-xl" />
+            <div className="absolute -bottom-1 -right-1 h-7 w-7 rounded-full bg-primary border-2 border-background flex items-center justify-center">
+              <Shield className="h-3.5 w-3.5 text-primary-foreground" />
+            </div>
           </div>
           <h1 className="text-2xl font-display font-bold">Control Panel</h1>
           <p className="text-muted-foreground text-sm mt-1">Khu vực quản trị • Chỉ dành cho Admin / Super Admin</p>
