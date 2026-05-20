@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { useWebRTC, type CallType } from '@/hooks/useWebRTC';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
+import { useAppPermissions } from '@/hooks/useAppPermissions';
 import { toast } from 'sonner';
 
 const ChatLayout: React.FC = () => {
@@ -32,6 +33,8 @@ const ChatLayout: React.FC = () => {
     onIncomingCall: handleIncomingCall,
   });
 
+  // Xin quyền cần thiết (thông báo, camera, mic) khi app native khởi động
+  useAppPermissions();
   // Đăng ký push notification trên native (iOS/Android)
   usePushNotifications(user?.id);
 
